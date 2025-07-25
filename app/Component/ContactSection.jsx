@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import ContactForm from "../Component/contactform";
+import ContactForm from "../Component/contactform"; // Make sure this path is correct
 import {
   FaFacebookF,
   FaInstagram,
@@ -17,33 +17,32 @@ const ContactSection = () => {
     phone: "",
     message: "",
   });
-  const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
+  // const [errors, setErrors] = useState({});
 
-  const validate = () => {
-    const newErrors = {};
-    if (!form.name.trim()) newErrors.name = "Name is required";
-    if (!form.email.trim()) newErrors.email = "Email is required";
-    if (!form.phone.trim()) newErrors.phone = "Phone number is required";
-    if (!form.message.trim()) newErrors.message = "Message is required";
-    return newErrors;
-  };
+  // const validate = () => {
+  //   const newErrors = {};
+  //   if (!form.name.trim()) newErrors.name = "Name is required";
+  //   if (!form.email.trim()) newErrors.email = "Email is required";
+  //   if (!form.phone.trim()) newErrors.phone = "Phone number is required";
+  //   if (!form.message.trim()) newErrors.message = "Message is required";
+  //   return newErrors;
+  // };
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
+  // const handleChange = (e) => {
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+  //   setErrors({ ...errors, [e.target.name]: "" });
+  // };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    setSubmitted(true);
-    // Here you can handle the form submission (e.g., send to API)
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const validationErrors = validate();
+  //   if (Object.keys(validationErrors).length > 0) {
+  //     setErrors(validationErrors);
+  //     return;
+  //   }
+  //   setSubmitted(true);
+  //   // Here you can handle the form submission (e.g., send to API)
+  // };
 
   return (
     <section
@@ -70,7 +69,7 @@ const ContactSection = () => {
                     Phone
                   </p>
                   <a
-                    href="tel:+2348123456789"
+                    href="tel:+2347031147821"
                     className="text-blue-600 hover:underline dark:text-blue-400"
                   >
                     +234 0703 114 7821
@@ -104,7 +103,7 @@ const ContactSection = () => {
                     Email
                   </p>
                   <a
-                    href="firstchoiceafrovillalimited@gmail.com"
+                    href="mailto:firstchoiceafrovillalimited@gmail.com"
                     className="text-blue-600 hover:underline dark:text-blue-400"
                   >
                     firstchoiceafrovillalimited@gmail.com
