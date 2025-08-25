@@ -1,15 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import {
-  MapPin,
-  Home,
-  Calendar,
-  DollarSign,
-  FileText,
-  Phone,
-  Mail,
-  Star,
-} from "lucide-react";
+import { MapPin, Home, FileText, Phone, Mail, Star } from "lucide-react";
 
 const RealEstateProperties = () => {
   const [selectedProperty, setSelectedProperty] = useState(null);

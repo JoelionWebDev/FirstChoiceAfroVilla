@@ -3,7 +3,7 @@
 import { useState } from "react";
 // Make sure this import path is correct and the firebase config exists
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "../../lib/firebase"; // This is likely causing the build failure
+import { db } from "../../lib/firebase";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
