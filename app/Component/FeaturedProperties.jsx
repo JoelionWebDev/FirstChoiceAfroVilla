@@ -183,16 +183,16 @@ export default function FAQAccordion() {
               50 x 100ft
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 text-sm sm:text-base whitespace-nowrap">
-              2,000,000
+              3,000,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              2,100,000
+              3,150,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              2,200,000
+              3,300,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              2,300,000
+              3,450,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
               500,000
@@ -207,16 +207,16 @@ export default function FAQAccordion() {
               50 x 100ft
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 text-sm sm:text-base whitespace-nowrap">
-              15,000,000
+              25,000,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              15,750,000
+              25,500,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              16,500,000
+              26,500,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              17,250,000
+              27,250,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
               500,000
@@ -231,16 +231,16 @@ export default function FAQAccordion() {
               50 x 100ft
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 text-sm sm:text-base whitespace-nowrap">
-              10,000,000
+              25,000,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              10,500,000
+              25,500,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              11,000,000
+              26,000,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              11,500,000
+              26,500,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
               500,000
