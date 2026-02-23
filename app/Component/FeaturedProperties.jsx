@@ -183,16 +183,16 @@ export default function FAQAccordion() {
               50 x 100ft
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 text-sm sm:text-base whitespace-nowrap">
-              3,000,000
+              5,000,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              3,150,000
+              5,150,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              3,300,000
+              5,300,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
-              3,450,000
+              5,450,000
             </td>
             <td className="border border-gray-200 px-2 sm:px-4 py-3 font-semibold text-sm sm:text-base whitespace-nowrap">
               500,000
@@ -302,31 +302,29 @@ export default function FAQAccordion() {
                   {item.question}
                 </h3>
                 <div className="flex-shrink-0">
-                  {openItems.has(index) ? (
+                  {openItems.has(index) ?
                     <ChevronUp className="w-6 h-6 text-blue-600 transition-transform duration-300" />
-                  ) : (
-                    <ChevronDown className="w-6 h-6 text-gray-400 transition-transform duration-300" />
-                  )}
+                  : <ChevronDown className="w-6 h-6 text-gray-400 transition-transform duration-300" />
+                  }
                 </div>
               </div>
             </button>
 
             <div
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                openItems.has(index)
-                  ? "max-h-screen opacity-100"
-                  : "max-h-0 opacity-0"
+                openItems.has(index) ?
+                  "max-h-screen opacity-100"
+                : "max-h-0 opacity-0"
               }`}
             >
               <div className="px-6 pb-5">
                 <div className="pt-2 border-t border-gray-100">
-                  {item.answer === "pricing-table" ? (
+                  {item.answer === "pricing-table" ?
                     <div className="mt-4">{pricingTable}</div>
-                  ) : (
-                    <p className="text-gray-600 leading-relaxed mt-4">
+                  : <p className="text-gray-600 leading-relaxed mt-4">
                       {item.answer}
                     </p>
-                  )}
+                  }
                 </div>
               </div>
             </div>

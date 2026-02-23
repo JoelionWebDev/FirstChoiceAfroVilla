@@ -130,10 +130,10 @@ const RealEstateProperties = () => {
       location:
         "Agbogazi Nike, Enugu East LGA, Enugu State. Very close to Ugwogo Market",
       size: "50 x 100ft",
-      outright: "₦3,000,000",
-      threeMonths: "₦3,150,000",
-      sixMonths: "₦3,300,000",
-      twelveMonths: "₦3,450,000",
+      outright: "₦5,000,000",
+      threeMonths: "₦5,150,000",
+      sixMonths: "₦5,300,000",
+      twelveMonths: "₦5,450,000",
       deedOfAssignment: "₦500,000",
       highlights: [
         "Close to Ugwogo Market",
@@ -328,14 +328,12 @@ const RealEstateProperties = () => {
                     disabled={buttonLoading === `viewPlans${property.id}`}
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
                   >
-                    {buttonLoading === `viewPlans${property.id}` ? (
+                    {buttonLoading === `viewPlans${property.id}` ?
                       <>
                         <LoadingSpinner size="small" />
                         <span className="ml-2">Loading...</span>
                       </>
-                    ) : (
-                      "View Payment Plans"
-                    )}
+                    : "View Payment Plans"}
                   </button>
                 </div>
               </div>
@@ -433,28 +431,24 @@ const RealEstateProperties = () => {
               disabled={buttonLoading === "schedule"}
               className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              {buttonLoading === "schedule" ? (
+              {buttonLoading === "schedule" ?
                 <>
                   <LoadingSpinner size="small" />
                   <span className="ml-2">Scheduling...</span>
                 </>
-              ) : (
-                "Schedule Site Visit"
-              )}
+              : "Schedule Site Visit"}
             </button>
             <button
               onClick={() => handleButtonClick("info")}
               disabled={buttonLoading === "info"}
               className="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-blue-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              {buttonLoading === "info" ? (
+              {buttonLoading === "info" ?
                 <>
                   <LoadingSpinner size="small" />
                   <span className="ml-2">Loading...</span>
                 </>
-              ) : (
-                "Get More Information"
-              )}
+              : "Get More Information"}
             </button>
           </div>
         </div>
@@ -554,14 +548,12 @@ const RealEstateProperties = () => {
                   disabled={buttonLoading === `reserve${selectedProperty.id}`}
                   className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  {buttonLoading === `reserve${selectedProperty.id}` ? (
+                  {buttonLoading === `reserve${selectedProperty.id}` ?
                     <>
                       <LoadingSpinner size="small" />
                       <span className="ml-2">Reserving...</span>
                     </>
-                  ) : (
-                    "Reserve This Property"
-                  )}
+                  : "Reserve This Property"}
                 </button>
                 <button
                   onClick={() =>
@@ -570,14 +562,12 @@ const RealEstateProperties = () => {
                   disabled={buttonLoading === `visit${selectedProperty.id}`}
                   className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
                 >
-                  {buttonLoading === `visit${selectedProperty.id}` ? (
+                  {buttonLoading === `visit${selectedProperty.id}` ?
                     <>
                       <LoadingSpinner size="small" />
                       <span className="ml-2">Scheduling...</span>
                     </>
-                  ) : (
-                    "Schedule Visit"
-                  )}
+                  : "Schedule Visit"}
                 </button>
               </div>
             </div>

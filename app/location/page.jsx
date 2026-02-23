@@ -34,10 +34,10 @@ const estateData = [
       "Agbogazi Nike, Enugu East LGA, Enugu State. Very close to Ugwogo Market.",
     plotSize: "50 x 100ft",
     pricing: {
-      outright: "₦3,000,000",
-      "3months": "₦3,150,000",
-      "6months": "₦3,300,000",
-      "12months": "₦3,450,000",
+      outright: "₦5,000,000",
+      "3months": "₦5,150,000",
+      "6months": "₦5,300,000",
+      "12months": "₦5,450,000",
     },
     deedFee: "₦500,000",
   },
@@ -142,9 +142,9 @@ const EstateCard = ({ estate }) => {
                 key={plan.key}
                 onClick={() => setSelectedPlan(plan.key)}
                 className={`p-3 rounded-lg border-2 transition-all duration-200 text-sm font-medium ${
-                  selectedPlan === plan.key
-                    ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                    : "border-gray-200 hover:border-emerald-300 text-gray-700"
+                  selectedPlan === plan.key ?
+                    "border-emerald-500 bg-emerald-50 text-emerald-700"
+                  : "border-gray-200 hover:border-emerald-300 text-gray-700"
                 }`}
               >
                 {plan.label}
@@ -157,9 +157,9 @@ const EstateCard = ({ estate }) => {
               {estate.pricing[selectedPlan]}
             </div>
             <div className="text-sm text-gray-600">
-              {selectedPlan === "outright"
-                ? "One-time payment"
-                : `${selectedPlan.replace("months", "")} month payment plan`}
+              {selectedPlan === "outright" ?
+                "One-time payment"
+              : `${selectedPlan.replace("months", "")} month payment plan`}
             </div>
           </div>
 
