@@ -225,7 +225,7 @@ export default function FAQAccordion() {
   };
 
   return (
-    <section id="faq" className="py-20 sm:py-28 bg-gray-50">
+    <section id="faq" className="py-20 sm:py-28 bg-bg-muted">
       <div className="max-w-4xl mx-auto px-6">
         <motion.div
           ref={ref}

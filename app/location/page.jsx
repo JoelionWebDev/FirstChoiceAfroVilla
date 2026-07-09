@@ -96,7 +96,7 @@ function EstateCard({ estate, i }) {
               >{plan.label}</button>
             ))}
           </div>
-          <div className="bg-gray-50 rounded-xl p-4 mb-3">
+          <div className="bg-bg-muted rounded-xl p-4 mb-3">
             <div className="text-2xl font-bold text-brand-600 mb-1">{fn(estate.pricing[selectedPlan])}</div>
             <div className="text-xs text-charcoal-500">{selectedPlan === "outright" ? "One-time payment" : `${selectedPlan.replace("months", "")} month payment plan`}</div>
           </div>
@@ -116,7 +116,7 @@ function EstateCard({ estate, i }) {
 
 export default function LocationsPage() {
   return (
-    <div className="bg-white min-h-screen pt-20">
+    <div className="bg-background min-h-screen pt-20">
       {/* HERO */}
       <section className="relative bg-charcoal-950 py-24 sm:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(202,164,74,0.1),transparent_60%)]" />

@@ -16,7 +16,7 @@ const fadeUp = {
 
 export default function ContactPage() {
   return (
-    <div className="bg-white min-h-screen pt-20">
+    <div className="bg-background min-h-screen pt-20">
       {/* HERO */}
       <section className="relative bg-charcoal-950 py-24 sm:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(202,164,74,0.1),transparent_60%)]" />

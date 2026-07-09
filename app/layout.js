@@ -2,6 +2,7 @@ import Navbar from "./Component/Navbar";
 import "./globals.css";
 import Footer from "./Component/Footer";
 import ChatWidget from "./Component/ChatWidget";
+import { ThemeProvider } from "./Component/ThemeProvider";
 
 export const metadata = {
   title: "First Choice Afro Villa Limited - Premium Land Investments in Nigeria",
@@ -10,12 +11,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        <Navbar />
-        {children}
-        <Footer />
-        <ChatWidget />
+        <ThemeProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <ChatWidget />
+        </ThemeProvider>
       </body>
     </html>
   );

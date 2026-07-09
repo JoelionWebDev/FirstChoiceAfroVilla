@@ -49,7 +49,7 @@ const TestimonialsSection = () => {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="testimonials" className="py-20 sm:py-28 bg-gray-50">
+    <section id="testimonials" className="py-20 sm:py-28 bg-bg-muted">
       <div className="max-w-6xl mx-auto px-6">
         <motion.div
           ref={ref}

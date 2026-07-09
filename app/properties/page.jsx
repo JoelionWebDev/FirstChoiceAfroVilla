@@ -173,7 +173,7 @@ export default function PropertiesPage() {
   const [selectedProperty, setSelectedProperty] = useState(null);
 
   return (
-    <div className="bg-white min-h-screen pt-20">
+    <div className="bg-background min-h-screen pt-20">
       {/* HERO */}
       <section className="relative bg-charcoal-950 py-24 sm:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(202,164,74,0.12),transparent_60%)]" />
@@ -240,7 +240,7 @@ export default function PropertiesPage() {
       </section>
 
       {/* PRICING TABLE */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-bg-muted">
         <div className="max-w-6xl mx-auto px-6">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-14">
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-charcoal-900">Complete Pricing Overview</h2>
@@ -298,7 +298,7 @@ export default function PropertiesPage() {
                       <div key={idx} className="flex items-center gap-2 text-sm text-charcoal-600"><Star className="w-4 h-4 text-yellow-500" />{h}</div>
                     ))}
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="p-4 bg-bg-muted rounded-xl">
                     <div className="flex items-center gap-2 mb-1"><FileText className="w-4 h-4 text-charcoal-500" /><span className="font-medium text-sm">Documentation Fee</span></div>
                     <p className="text-lg font-bold text-charcoal-900">{formatPrice(selectedProperty.deedOfAssignment)}</p>
                     <p className="text-xs text-charcoal-500">Deed of Assignment</p>
@@ -311,7 +311,7 @@ export default function PropertiesPage() {
                   <MessageCircle className="w-4 h-4" /> Inquire Now
                 </a>
                 <a href="tel:+2347031147821"
-                  className="flex-1 border border-gray-300 text-charcoal-700 py-3 rounded-xl font-semibold text-sm transition-all hover:bg-gray-50 flex items-center justify-center gap-2">
+                  className="flex-1 border border-gray-300 text-charcoal-700 py-3 rounded-xl font-semibold text-sm transition-all hover:bg-bg-muted flex items-center justify-center gap-2">
                   <Phone className="w-4 h-4" /> Call Agent
                 </a>
               </div>

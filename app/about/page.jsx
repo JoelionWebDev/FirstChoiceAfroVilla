@@ -63,7 +63,7 @@ const AboutUs = () => {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <div className="bg-white">
+    <div className="bg-background">
       {/* HERO */}
       <section className="relative min-h-[70vh] flex items-center bg-charcoal-950 overflow-hidden">
         <div className="absolute inset-0">
@@ -97,7 +97,7 @@ const AboutUs = () => {
       </section>
 
       {/* MISSION & VISION */}
-      <section ref={ref} className="py-20 sm:py-28 bg-gray-50">
+      <section ref={ref} className="py-20 sm:py-28 bg-bg-muted">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-8">
             <motion.div initial="hidden" animate={inView ? "visible" : "hidden"} variants={fadeUp} className="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-shadow">
@@ -173,7 +173,7 @@ const AboutUs = () => {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {teamMembers.map((member, i) => (
-              <motion.div key={member.name} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i} className="bg-gray-50 rounded-2xl p-6 text-center border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all">
+              <motion.div key={member.name} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i} className="bg-bg-muted rounded-2xl p-6 text-center border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all">
                 <div className="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden bg-brand-100">
                   <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                 </div>
@@ -187,7 +187,7 @@ const AboutUs = () => {
       </section>
 
       {/* WHY CHOOSE US */}
-      <section className="py-20 sm:py-28 bg-gray-50">
+      <section className="py-20 sm:py-28 bg-bg-muted">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
             <span className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-600">Why Us</span>
