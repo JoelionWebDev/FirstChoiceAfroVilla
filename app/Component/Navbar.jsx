@@ -3,215 +3,155 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-  FaTwitter,
-  FaBars,
-  FaTimes,
-  FaSun,
-  FaMoon,
-} from "react-icons/fa";
+import { Menu, X, Phone, MessageCircle, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Handle hydration mismatch
   useEffect(() => {
     setMounted(true);
-    // Check for saved theme preference or default to light mode
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove("dark");
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-
-    if (newMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  };
-
   const navigationLinks = [
-    { href: "/about", label: "About Us" },
+    { href: "/", label: "Home" },
     { href: "/properties", label: "Properties" },
-    { href: "/location", label: "Location" },
+    { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ];
 
-  const socialLinks = [
-    {
-      href: "https://www.facebook.com/share/1CjbnjKdZz/",
-      icon: FaFacebookF,
-      label: "Facebook",
-    },
-    {
-      href: "https://www.instagram.com/firstchoice_av?igsh=enJxdDJhZHhyZ3l4",
-      icon: FaInstagram,
-      label: "Instagram",
-    },
-    { href: "#", icon: FaLinkedinIn, label: "LinkedIn" },
-    { href: "#", icon: FaTwitter, label: "Twitter" },
-  ];
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
-  if (!mounted) {
-    return null; // Prevent hydration mismatch
-  }
+  if (!mounted) return null;
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="relative w-24 h-24 overflow-hidden rounded-lg group-hover:scale-105 transition-transform duration-300">
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100"
+            : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative w-14 h-14 sm:w-16 sm:h-16 overflow-hidden">
                 <Image
                   src="/logo2.png"
-                  alt="Real Estate Logo"
+                  alt="First Choice Afro Villa"
                   fill
                   className="object-contain"
                   priority
                 />
               </div>
+              <div className="hidden sm:block">
+                <span className={`font-serif text-lg font-bold tracking-tight transition-colors ${
+                  scrolled ? "text-charcoal-900" : "text-white"
+                }`}>
+                  First Choice
+                </span>
+                <span className={`block text-xs tracking-widest transition-colors ${
+                  scrolled ? "text-brand-600" : "text-brand-300"
+                }`}>
+                  AFRO VILLA LTD
+                </span>
+              </div>
             </Link>
-          </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {navigationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-2 text-sm font-medium transition-colors duration-300 relative group"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
-              </Link>
-            ))}
-          </div>
-
-          {/* Social Media Icons & Theme Toggle - Desktop */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 hover:scale-110 transform"
-                  aria-label={social.label}
+            <div className="hidden lg:flex items-center gap-8">
+              {navigationLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-medium tracking-wide transition-colors duration-300 relative group ${
+                    scrolled
+                      ? "text-charcoal-700 hover:text-brand-600"
+                      : "text-white/90 hover:text-white"
+                  }`}
                 >
-                  <social.icon className="w-5 h-5" />
-                </a>
+                  {link.label}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-500 group-hover:w-full transition-all duration-300" />
+                </Link>
               ))}
             </div>
 
-            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-2"></div>
-
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300 hover:scale-105 transform"
-              aria-label="Toggle dark mode"
-            >
-              {isDarkMode ? (
-                <FaSun className="w-5 h-5 text-yellow-500" />
-              ) : (
-                <FaMoon className="w-5 h-5 text-gray-600" />
-              )}
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center space-x-2">
-            {/* Dark Mode Toggle - Mobile */}
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
-              aria-label="Toggle dark mode"
-            >
-              {isDarkMode ? (
-                <FaSun className="w-4 h-4 text-yellow-500" />
-              ) : (
-                <FaMoon className="w-4 h-4 text-gray-600" />
-              )}
-            </button>
+            <div className="hidden lg:flex items-center gap-4">
+              <a
+                href="https://wa.me/2347031147821"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                  scrolled
+                    ? "bg-brand-500 text-charcoal-950 hover:bg-brand-400 shadow-lg shadow-brand-500/25"
+                    : "bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20"
+                }`}
+              >
+                <MessageCircle className="w-4 h-4" />
+                Talk to Agent
+              </a>
+            </div>
 
             <button
-              onClick={toggleMenu}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`lg:hidden p-2.5 rounded-xl transition-colors ${
+                scrolled
+                  ? "bg-gray-100 text-charcoal-700"
+                  : "bg-white/10 backdrop-blur-sm text-white"
+              }`}
               aria-label="Toggle menu"
             >
-              {isMenuOpen ? (
-                <FaTimes className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-              ) : (
-                <FaBars className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-              )}
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      <div
-        className={`lg:hidden transition-all duration-300 ease-in-out ${
-          isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        } overflow-hidden`}
-      >
-        <div className="px-4 pt-2 pb-6 space-y-2 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-          {navigationLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={closeMenu}
-              className="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors duration-300"
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden border-t border-gray-100 bg-white shadow-xl"
             >
-              {link.label}
-            </Link>
-          ))}
-
-          {/* Social Media Icons - Mobile */}
-          <div className="flex items-center justify-center space-x-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-            {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 hover:scale-110 transform"
-                aria-label={social.label}
-              >
-                <social.icon className="w-6 h-6" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </nav>
+              <div className="px-4 py-6 space-y-1">
+                {navigationLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block px-4 py-3 text-charcoal-700 hover:text-brand-600 hover:bg-brand-50 rounded-xl font-medium transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <div className="pt-4 border-t border-gray-100">
+                  <a
+                    href="https://wa.me/2347031147821"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 w-full px-4 py-3.5 bg-brand-500 hover:bg-brand-400 text-charcoal-950 rounded-xl font-semibold transition-colors"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    Talk to an Agent on WhatsApp
+                  </a>
+                  <a
+                    href="tel:+2347031147821"
+                    className="flex items-center gap-3 w-full px-4 py-3.5 mt-2 bg-charcoal-50 hover:bg-charcoal-100 text-charcoal-800 rounded-xl font-medium transition-colors"
+                  >
+                    <Phone className="w-5 h-5" />
+                    Call Us: +234 703 114 7821
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
+    </>
   );
 };
 

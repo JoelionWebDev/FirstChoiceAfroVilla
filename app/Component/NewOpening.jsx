@@ -238,6 +238,35 @@ export default function EnuguSmartCityEstate() {
         </motion.div>
       </section>
 
+      {/* ============ TITLE / DOCUMENTATION BADGE ============ */}
+      <section className="relative px-6 py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="flex flex-wrap items-center justify-center gap-4 rounded-2xl border border-[#caa44a]/30 bg-white/[0.04] backdrop-blur-xl px-6 py-5 sm:px-10 sm:py-6"
+          >
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="h-6 w-6 text-[#e7c873]" />
+              <span className="text-sm font-semibold uppercase tracking-[0.08em] text-white/80">Land Title:</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#caa44a]/15 px-4 py-2 text-sm font-semibold text-[#e7c873]">
+                <CheckCircle2 className="h-4 w-4" />
+                C of O (Certificate of Occupancy)
+              </span>
+              <span className="text-white/30 text-sm">+</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#caa44a]/15 px-4 py-2 text-sm font-semibold text-[#e7c873]">
+                <CheckCircle2 className="h-4 w-4" />
+                Governor&apos;s Consent
+              </span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ============ MAIN SELLING POINT / DESCRIPTION ============ */}
       <section className="relative px-6 py-20 sm:py-28">
         <div className="mx-auto max-w-4xl text-center">

@@ -1,168 +1,153 @@
 "use client";
-import React, { useState } from "react";
-import ContactForm from "../Component/contactform"; // Make sure this path is correct
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-  FaWhatsapp,
-  FaPhoneAlt,
-  FaEnvelope,
-} from "react-icons/fa";
+
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import ContactForm from "../Component/contactform";
+import { FaFacebookF, FaInstagram, FaWhatsapp, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { MapPin } from "lucide-react";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
 
 const ContactSection = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-  // const [errors, setErrors] = useState({});
-
-  // const validate = () => {
-  //   const newErrors = {};
-  //   if (!form.name.trim()) newErrors.name = "Name is required";
-  //   if (!form.email.trim()) newErrors.email = "Email is required";
-  //   if (!form.phone.trim()) newErrors.phone = "Phone number is required";
-  //   if (!form.message.trim()) newErrors.message = "Message is required";
-  //   return newErrors;
-  // };
-
-  // const handleChange = (e) => {
-  //   setForm({ ...form, [e.target.name]: e.target.value });
-  //   setErrors({ ...errors, [e.target.name]: "" });
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const validationErrors = validate();
-  //   if (Object.keys(validationErrors).length > 0) {
-  //     setErrors(validationErrors);
-  //     return;
-  //   }
-  //   setSubmitted(true);
-  //   // Here you can handle the form submission (e.g., send to API)
-  // };
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section
-      className="py-16 px-4 bg-white dark:bg-gray-900 transition-colors duration-300"
-      id="contact"
-    >
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-          Get In Touch With Us
-        </h2>
-        <div className="flex flex-col md:flex-row gap-10">
-          {/* Contact Info Panel */}
-          <div className="md:w-1/2 bg-blue-50 dark:bg-gray-800 rounded-lg p-8 shadow-lg flex flex-col justify-between">
+    <section id="contact" className="py-20 sm:py-28 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={fadeUp}
+          className="text-center mb-14"
+        >
+          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-600">
+            Contact
+          </span>
+          <h2 className="mt-4 font-serif text-3xl sm:text-4xl font-bold text-charcoal-900">
+            Get In Touch With Us
+          </h2>
+        </motion.div>
+
+        <div className="grid md:grid-cols-5 gap-10">
+          <motion.div
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            variants={fadeUp}
+            custom={1}
+            className="md:col-span-2 bg-charcoal-50 rounded-2xl p-8 border border-gray-200 flex flex-col justify-between"
+          >
             <div>
-              <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-400 mb-4">
-                First Choice Afro Villa LTD
-              </h3>
-              <div className="mb-4 flex items-start">
-                <span className="text-blue-600 dark:text-blue-400 mt-1 mr-3">
-                  <FaPhoneAlt />
-                </span>
-                <div>
-                  <p className="text-gray-700 dark:text-gray-200 font-medium">
-                    Phone
-                  </p>
-                  <a
-                    href="tel:+2347031147821"
-                    className="text-blue-600 hover:underline dark:text-blue-400"
-                  >
-                    +234 0703 114 7821
-                  </a>
-                </div>
-              </div>
-              <div className="mb-4 flex items-start">
-                <span className="text-green-600 dark:text-green-400 mt-1 mr-3">
-                  <FaWhatsapp />
-                </span>
-                <div>
-                  <p className="text-gray-700 dark:text-gray-200 font-medium">
-                    WhatsApp
-                  </p>
-                  <a
-                    href="https://wa.link/7bmwjs"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-green-600 hover:underline dark:text-green-400"
-                  >
-                    Chat on WhatsApp
-                  </a>
-                </div>
-              </div>
-              <div className="mb-4 flex items-start">
-                <span className="text-blue-600 dark:text-blue-400 mt-1 mr-3">
-                  <FaEnvelope />
-                </span>
-                <div>
-                  <p className="text-gray-700 dark:text-gray-200 font-medium">
-                    Email
-                  </p>
-                  <a
-                    href="mailto:firstchoiceafrovillalimited@gmail.com"
-                    className="text-blue-600 hover:underline dark:text-blue-400"
-                  >
-                    firstchoiceafrovillalimited@gmail.com
-                  </a>
-                </div>
-              </div>
-              <div className="mb-4 flex items-start">
-                <span className="text-blue-600 dark:text-blue-400 mt-1 mr-3">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
-                    <path
-                      fill="currentColor"
-                      d="M12 2C7.03 2 3 6.03 3 11c0 5.25 7.5 11 8.1 11.45.18.13.42.13.6 0C13.5 22 21 16.25 21 11c0-4.97-4.03-9-9-9zm0 17.88C10.14 18.13 5 13.97 5 11c0-3.87 3.13-7 7-7s7 3.13 7 7c0 2.97-5.14 7.13-7 8.88z"
-                    />
-                    <circle cx="12" cy="11" r="2.5" fill="currentColor" />
-                  </svg>
-                </span>
-                <div>
-                  <p className="text-gray-700 dark:text-gray-200 font-medium">
-                    Office Address
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Head Office: 45 Allen Avenue by DHL building Ikeja, Lagos
+              <h3 className="text-xl font-bold text-charcoal-900 mb-6">First Choice Afro Villa LTD</h3>
+
+              <div className="space-y-5">
+                <div className="flex items-start gap-4">
+                  <div className="p-2.5 bg-brand-100 rounded-xl flex-shrink-0">
+                    <FaPhoneAlt className="w-4 h-4 text-brand-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-charcoal-800 text-sm">Phone</p>
+                    <a href="tel:+2347031147821" className="text-brand-600 hover:underline text-sm">
+                      +234 703 114 7821
+                    </a>
                     <br />
-                    Branch Office(s): 56, Chime Avenue, New Haven, Enugu Papilo
-                    Villa Estate, along Avu-Obosima road, Owerri.
-                  </p>
+                    <a href="tel:+2348035696337" className="text-brand-600 hover:underline text-sm">
+                      +234 803 569 6337
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="p-2.5 bg-green-50 rounded-xl flex-shrink-0">
+                    <FaWhatsapp className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-charcoal-800 text-sm">WhatsApp</p>
+                    <a
+                      href="https://wa.me/2347031147821"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-green-600 hover:underline text-sm"
+                    >
+                      Chat on WhatsApp
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="p-2.5 bg-blue-50 rounded-xl flex-shrink-0">
+                    <FaEnvelope className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-charcoal-800 text-sm">Email</p>
+                    <a
+                      href="mailto:firstchoiceafrovillalimited@gmail.com"
+                      className="text-brand-600 hover:underline text-sm"
+                    >
+                      firstchoiceafrovillalimited@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="p-2.5 bg-purple-50 rounded-xl flex-shrink-0">
+                    <MapPin className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-charcoal-800 text-sm">Office Address</p>
+                    <p className="text-charcoal-500 text-sm">
+                      Head Office: 45 Allen Avenue by DHL building Ikeja, Lagos
+                      <br />
+                      Branch: 56, Chime Avenue, New Haven, Enugu
+                      <br />
+                      Papilo Villa Estate, Avu-Obosima road, Owerri.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-            {/* Social Media */}
-            <div className="mt-6 flex gap-4">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
-              >
-                <FaFacebookF />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white transition-colors"
-              >
-                <FaInstagram />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-full bg-blue-800 hover:bg-blue-900 text-white transition-colors"
-              >
-                <FaLinkedinIn />
-              </a>
+
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <p className="text-sm font-medium text-charcoal-700 mb-3">Follow Us</p>
+              <div className="flex gap-3">
+                <a
+                  href="https://www.facebook.com/share/1CjbnjKdZz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors"
+                  aria-label="Facebook"
+                >
+                  <FaFacebookF className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://www.instagram.com/firstchoice_av"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 bg-gradient-to-br from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-xl transition-colors"
+                  aria-label="Instagram"
+                >
+                  <FaInstagram className="w-4 h-4" />
+                </a>
+              </div>
             </div>
-          </div>
-          {/* Contact Form */}
-          <ContactForm />
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            variants={fadeUp}
+            custom={2}
+          >
+            <ContactForm />
+          </motion.div>
         </div>
       </div>
     </section>

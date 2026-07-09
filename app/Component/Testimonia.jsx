@@ -1,120 +1,128 @@
 "use client";
-import React from "react";
+
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Star, MessageCircle } from "lucide-react";
+
+const testimonials = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    rating: 5,
+    quote:
+      "Working with this team made buying our first land stress-free and enjoyable. Their expertise throughout the entire process was exceptional.",
+  },
+  {
+    id: 2,
+    name: "Michael Chen",
+    rating: 5,
+    quote:
+      "They helped us find the perfect family plot in our ideal location. The attention to detail and market knowledge was impressive.",
+  },
+  {
+    id: 3,
+    name: "Emily Rodriguez",
+    rating: 5,
+    quote:
+      "Professional, responsive, and truly cared about finding us the right property. We couldn't be happier with our investment!",
+  },
+  {
+    id: 4,
+    name: "David Thompson",
+    rating: 4,
+    quote:
+      "Excellent service from start to finish. They made the entire process smooth and got us a great deal on our property.",
+  },
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
 
 const TestimonialsSection = () => {
-  const testimonials = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      rating: 5,
-      quote:
-        "Working with this team made buying our first home stress-free and enjoyable. Their expertise and dedication throughout the entire process was exceptional.",
-      hasPhoto: false,
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      rating: 5,
-      quote:
-        "They helped us find the perfect family home in our ideal neighborhood. The attention to detail and market knowledge was impressive.",
-      hasPhoto: false,
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      rating: 5,
-      quote:
-        "Professional, responsive, and truly cared about finding us the right property. We couldn't be happier with our new home!",
-      hasPhoto: false,
-    },
-    {
-      id: 4,
-      name: "David Thompson",
-      rating: 4,
-      quote:
-        "Excellent service from start to finish. They made the selling process smooth and got us a great price for our property.",
-      hasPhoto: false,
-    },
-  ];
-
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <span key={i} className="text-yellow-400 text-sm">
-          {i <= rating ? "★" : "☆"}
-        </span>
-      );
-    }
-    return stars;
-  };
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-16 px-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-      <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+    <section id="testimonials" className="py-20 sm:py-28 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-6">
+        <motion.div
+          ref={ref}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={fadeUp}
+          className="text-center mb-14"
+        >
+          <span className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-600">
+            Testimonials
+          </span>
+          <h2 className="mt-4 font-serif text-3xl sm:text-4xl font-bold text-charcoal-900">
             What Our Clients Say
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our satisfied clients
-            have to say about their experience working with us.
+          <p className="mt-4 text-charcoal-500 max-w-xl mx-auto">
+            Don&apos;t just take our word for it. Here&apos;s what our satisfied clients have to say.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
-          {testimonials.map((testimonial) => (
-            <div
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {testimonials.map((testimonial, i) => (
+            <motion.div
               key={testimonial.id}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700"
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+              variants={fadeUp}
+              custom={i}
+              className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
             >
-              {/* Avatar */}
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
-                  <span className="text-blue-600 dark:text-blue-400 text-xl font-semibold">
-                    {testimonial.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-11 h-11 rounded-full bg-brand-100 flex items-center justify-center">
+                  <span className="text-brand-600 font-bold text-sm">
+                    {testimonial.name.split(" ").map((n) => n[0]).join("")}
                   </span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
-                    {testimonial.name}
-                  </h3>
-                  <div className="flex gap-1 mt-1">
-                    {renderStars(testimonial.rating)}
+                  <h3 className="font-semibold text-sm text-charcoal-900">{testimonial.name}</h3>
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, si) => (
+                      <Star
+                        key={si}
+                        className={`w-3.5 h-3.5 ${si < testimonial.rating ? "fill-brand-500 text-brand-500" : "fill-gray-200 text-gray-200"}`}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
-
-              {/* Quote */}
               <div className="relative">
-                <div className="text-4xl text-blue-200 dark:text-blue-800 absolute -top-2 -left-1 font-serif">
-                  "
-                </div>
-                <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed pl-6">
-                  {testimonial.quote}
-                </p>
+                <span className="absolute -top-1 left-0 text-4xl text-brand-200 font-serif leading-none">&ldquo;</span>
+                <p className="text-sm text-charcoal-600 leading-relaxed pl-5">{testimonial.quote}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Ready to start your real estate journey?
-          </p>
-          <button
-            onClick={() => window.open("https://wa.link/7bmwjs", "_blank")}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
+        <motion.div
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={fadeUp}
+          custom={4}
+          className="text-center mt-12"
+        >
+          <p className="text-charcoal-500 mb-6">Ready to start your real estate journey?</p>
+          <a
+            href="https://wa.me/2347031147821"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-400 text-charcoal-950 font-semibold px-8 py-3.5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
           >
+            <MessageCircle className="w-5 h-5" />
             Contact Us Today
-          </button>
-        </div>
+          </a>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,198 +1,166 @@
 "use client";
-import React, { useState } from "react";
-import { Search, MapPin, Phone, ArrowRight, Sun, Moon } from "lucide-react";
 
-export default function RealEstateHero() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { MapPin, MessageCircle, ArrowRight, ChevronDown, Shield } from "lucide-react";
+import Link from "next/link";
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+function useCountUp(target, inView, duration = 1.6) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    let start = null;
+    let raf = 0;
+    const step = (ts) => {
+      if (start === null) start = ts;
+      const progress = Math.min((ts - start) / (duration * 1000), 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.floor(eased * target));
+      if (progress < 1) raf = requestAnimationFrame(step);
+      else setValue(target);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, target, duration]);
+  return value;
+}
 
-  const handlePhoneClick = async () => {
-    const phoneNumber = "09058892149";
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i = 0) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
 
-    try {
-      await navigator.clipboard.writeText(phoneNumber);
-      // Optional: Show a success message
-      alert("Phone number copied to clipboard!");
-    } catch (err) {
-      console.error("Failed to copy phone number: ", err);
-      // Fallback for older browsers
-      const textArea = document.createElement("textarea");
-      textArea.value = phoneNumber;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-      alert("Phone number copied to clipboard!");
-    }
-  };
+const statsData = [
+  { value: 500, suffix: "+", label: "Properties" },
+  { value: 50, suffix: "+", label: "Locations" },
+  { value: 98, suffix: "%", label: "Satisfaction" },
+];
 
+function StatItem({ value, suffix, label, index }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const count = useCountUp(value, inView);
   return (
-    <div className={isDarkMode ? "dark" : ""}>
-      <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 dark:from-black dark:via-gray-900 dark:to-slate-900 overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
+    <motion.div
+      ref={ref}
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={fadeUp}
+      className="text-center"
+    >
+      <div className="text-3xl md:text-5xl font-bold text-amber-300">
+        {count}<span className="text-2xl md:text-3xl">{suffix}</span>
+      </div>
+      <div className="text-sm md:text-base text-white/60 mt-1 tracking-wide">{label}</div>
+    </motion.div>
+  );
+}
+
+export default function HeroSection() {
+  return (
+    <section className="relative min-h-screen overflow-hidden bg-[#0a1628]">
+      {/* Parallax background with geometric overlay */}
+      <div className="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          alt="Premium real estate development"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/95 via-[#0d1f3c]/85 to-[#0a1628]/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] via-transparent to-[#0a1628]/40" />
+        <div className="absolute inset-0 opacity-[0.04]"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}
         />
+      </div>
 
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-indigo-400/20 to-cyan-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="relative z-10 flex justify-between items-center px-6 md:px-12 py-6">
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 text-white hover:scale-110"
-            aria-label="Toggle dark mode"
+      <div className="relative z-10 flex flex-col justify-center min-h-screen px-6 lg:px-12 pt-24 pb-16">
+        <div className="max-w-6xl mx-auto w-full">
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full border border-amber-300/30 bg-white/5 backdrop-blur-md px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-amber-300/90 mb-8"
           >
-            {isDarkMode ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </button>
-        </nav>
+            <Shield className="w-3.5 h-3.5" />
+            Nigeria's Trusted Real Estate Partner
+          </motion.div>
 
-        {/* Hero Content */}
-        <div className="relative z-10 flex flex-col justify-center items-center min-h-screen px-6 md:px-12 -mt-20">
-          <div className="max-w-6xl mx-auto text-center">
-            {/* Main Headline */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-red-600 mb-6 leading-tight">
-              <span className="inline-block animate-fade-in">First Choice</span>
-              <br />
-              <span className="inline-block animate-fade-in delay-300 bg-gradient-to-r from-red-700 via-red-400 to-cyan-400 bg-clip-text text-transparent">
-                Afro Villa LTD
-              </span>
-            </h1>
-            {/* Subheading */}
-            <p className="text-xl md:text-2xl text-gray-200 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed animate-fade-in delay-500">
-              Explore a curated collection of premium land listings across
-              Nigeria’s most promising and desirable areas. Whether for
-              investment or development, your perfect plot awaits. Subscribe
-              below to get first access to exclusive land opportunities and
-              updates.
-            </p>
-            {/* Search Bar */}
-            <div className="mb-10 animate-fade-in delay-700">
-              <form className="max-w-2xl mx-auto relative">
-                <div className="relative">
-                  <input className=" bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:border-blue-500/50 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white transition-all duration-300" />
-                  <button
-                    onClick={() =>
-                      window.open(
-                        "https://formurl.com/to/firstchoice-afro-villa-limited",
-                        "_blank"
-                      )
-                    }
-                    className="w-full pl-16 pr-32 py-4 md:py-5 text-lg rounded-2xl absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2"
-                  >
-                    Subscribe
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </form>
-            </div>
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fade-in delay-1000">
-              <button
-                onClick={() => window.open("/properties", "_self")}
-                className="w-full pl-16 pr-32 py-4 md:py-5 group bg-gradient-to-r from-blue-600 to-purple-600/20 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 md:px-10 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 flex items-center gap-3"
-              >
-                <MapPin className="w-6 h-6 group-hover:animate-bounce" />
-                Browse Properties
-              </button>
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight max-w-4xl"
+          >
+            Own Premium Land in
+            <span className="block text-amber-300 mt-2 drop-shadow-[0_0_20px_rgba(252,191,73,0.15)]">
+              Nigeria's Finest Locations
+            </span>
+          </motion.h1>
 
-              <button
-                onClick={handlePhoneClick}
-                className="w-full pl-16 pr-32 py-4 md:py-5 group bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-2 border-white/30 hover:border-white/50 px-8 py-4 md:px-10 md:py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl flex items-center gap-3"
-              >
-                <Phone className="w-6 h-6 group-hover:animate-pulse" />
-                Contact an Agent
-              </button>
-            </div>
-            {/* Stats Section */}
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto animate-fade-in delay-1200">
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  500+
-                </div>
-                <div className="text-gray-300 dark:text-gray-400">
-                  Premium Properties
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  50+
-                </div>
-                <div className="text-gray-300 dark:text-gray-400">
-                  Luxury Locations
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                  98%
-                </div>
-                <div className="text-gray-300 dark:text-gray-400">
-                  Client Satisfaction
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mt-6 text-lg sm:text-xl text-white/60 max-w-2xl leading-relaxed"
+          >
+            First Choice Afro Villa Limited — discover verified, titled land across Nigeria's most promising locations. Flexible payment plans, guaranteed documentation, and 15+ years of trusted service.
+          </motion.p>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="mt-10 flex flex-col sm:flex-row gap-4"
+          >
+            <Link
+              href="/properties"
+              className="group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-2xl shadow-orange-500/40 hover:shadow-orange-500/60 hover:scale-[1.03]"
+            >
+              <MapPin className="w-5 h-5" />
+              Browse Properties
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <a
+              href="https://wa.me/2347031147821"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 border border-white/20 bg-white/[0.07] hover:bg-white/[0.12] backdrop-blur-sm text-white/90 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:border-white/40"
+            >
+              <MessageCircle className="w-5 h-5" />
+              Chat with an Agent
+            </a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
+            className="mt-16 grid grid-cols-3 gap-8 max-w-lg"
+          >
+            {statsData.map((stat, i) => (
+              <StatItem key={stat.label} index={i} {...stat} />
+            ))}
+          </motion.div>
         </div>
       </div>
 
-      {/* Custom Animation Styles */}
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.8s ease-out forwards;
-        }
-
-        .delay-300 {
-          animation-delay: 0.3s;
-        }
-
-        .delay-500 {
-          animation-delay: 0.5s;
-        }
-
-        .delay-700 {
-          animation-delay: 0.7s;
-        }
-
-        .delay-1000 {
-          animation-delay: 1s;
-        }
-
-        .delay-1200 {
-          animation-delay: 1.2s;
-        }
-      `}</style>
-    </div>
+      <motion.div
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <div className="flex flex-col items-center gap-1 text-white/30 text-xs tracking-widest">
+          <span>SCROLL</span>
+          <ChevronDown className="w-4 h-4" />
+        </div>
+      </motion.div>
+    </section>
   );
 }

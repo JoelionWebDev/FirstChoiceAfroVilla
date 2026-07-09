@@ -1,9 +1,17 @@
 "use client";
 
-import { useState } from "react";
-// Make sure this import path is correct and the firebase config exists
+import { useState, useEffect } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../lib/firebase";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
+
+const nigerianStates = [
+  "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue",
+  "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu",
+  "FCT (Abuja)", "Gombe", "Imo", "Jigawa", "Kaduna", "Kano", "Katsina",
+  "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo",
+  "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara"
+];
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -15,345 +23,222 @@ export default function ContactForm() {
     message: "",
   });
 
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({
     loading: false,
     success: false,
     error: null,
   });
 
+  const [touched, setTouched] = useState({});
+
+  const validate = (data) => {
+    const errs = {};
+    if (!data.name.trim()) errs.name = "Full name is required";
+    if (!data.email.trim()) errs.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errs.email = "Enter a valid email address";
+    if (!data.phone.trim()) errs.phone = "Phone number is required";
+    else if (!/^[\d\s\+\-\(\)]{7,15}$/.test(data.phone)) errs.phone = "Enter a valid phone number";
+    if (!data.state) errs.state = "Please select your state";
+    if (!data.subject.trim()) errs.subject = "Subject is required";
+    if (!data.message.trim()) errs.message = "Message is required";
+    return errs;
+  };
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    const updated = { ...formData, [name]: value };
+    setFormData(updated);
+    if (touched[name]) {
+      const errs = validate(updated);
+      setErrors((prev) => ({ ...prev, [name]: errs[name] || null }));
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    const errs = validate(formData);
+    setErrors((prev) => ({ ...prev, [name]: errs[name] || null }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errs = validate(formData);
+    setErrors(errs);
+    setTouched({ name: true, email: true, phone: true, state: true, subject: true, message: true });
+    if (Object.keys(errs).length > 0) return;
+
     setStatus({ loading: true, success: false, error: null });
 
     try {
-      // Add the document to Firebase
       await addDoc(collection(db, "contacts"), {
         ...formData,
         timestamp: serverTimestamp(),
       });
 
-      // Reset form and show success
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        state: "",
-        subject: "",
-        message: "",
-      });
+      setFormData({ name: "", email: "", phone: "", state: "", subject: "", message: "" });
+      setTouched({});
       setStatus({ loading: false, success: true, error: null });
-
-      // Hide success message after 5 seconds
-      setTimeout(() => {
-        setStatus({ loading: false, success: false, error: null });
-      }, 5000);
+      setTimeout(() => setStatus({ loading: false, success: false, error: null }), 6000);
     } catch (error) {
       console.error("Error adding document: ", error);
-      setStatus({
-        loading: false,
-        success: false,
-        error: "Failed to send message. Please try again.",
-      });
+      setStatus({ loading: false, success: false, error: "Failed to send message. Please try again." });
     }
   };
 
+  const inputClass = (field) =>
+    `w-full px-4 py-3.5 text-charcoal-900 bg-white border-2 rounded-xl transition-all duration-200 focus:outline-none placeholder-charcoal-300 ${
+      errors[field] && touched[field]
+        ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+        : "border-gray-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
+    }`;
+
+  const selectClass = (field) =>
+    `w-full px-4 py-3.5 text-charcoal-900 bg-white border-2 rounded-xl transition-all duration-200 appearance-none cursor-pointer focus:outline-none ${
+      errors[field] && touched[field]
+        ? "border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+        : "border-gray-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
+    }`;
+
   return (
-    <div className="md:w-1/2">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-lg">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Send Message
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            We'd love to hear from you. Send us a message!
-          </p>
+    <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
+        <div>
+          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">Full Name *</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={inputClass("name")}
+            placeholder="John Doe"
+          />
+          {errors.name && touched.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Field */}
-          <div className="relative group">
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="peer w-full px-4 py-4 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-300 placeholder-transparent"
-              placeholder="Your full name"
-            />
-            <label
-              htmlFor="name"
-              className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                formData.name
-                  ? "top-2 text-xs text-blue-600 font-medium"
-                  : "top-4 text-gray-500 dark:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:font-medium"
-              }`}
-            >
-              Full Name *
-            </label>
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">Email Address *</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={inputClass("email")}
+            placeholder="you@example.com"
+          />
+          {errors.email && touched.email && <p className="mt-1 text-xs text-red-500">{errors.email}</p>}
+        </div>
 
-          {/* Email Field */}
-          <div className="relative group">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="peer w-full px-4 py-4 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-300 placeholder-transparent"
-              placeholder="your.email@example.com"
-            />
-            <label
-              htmlFor="email"
-              className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                formData.email
-                  ? "top-2 text-xs text-blue-600 font-medium"
-                  : "top-4 text-gray-500 dark:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:font-medium"
-              }`}
-            >
-              Email Address *
-            </label>
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">Phone Number *</label>
+          <input
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={inputClass("phone")}
+            placeholder="+234 803 000 0000"
+          />
+          {errors.phone && touched.phone && <p className="mt-1 text-xs text-red-500">{errors.phone}</p>}
+        </div>
 
-          {/* Phone Field */}
-          <div className="relative group">
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              className="peer w-full px-4 py-4 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-300 placeholder-transparent"
-              placeholder="+234 (XXX) XXX-XXXX"
-            />
-            <label
-              htmlFor="phone"
-              className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                formData.phone
-                  ? "top-2 text-xs text-blue-600 font-medium"
-                  : "top-4 text-gray-500 dark:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:font-medium"
-              }`}
-            >
-              Phone Number *
-            </label>
-          </div>
-
-          {/* State Field */}
-          <div className="relative group">
-            <select
-              id="state"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              required
-              className="peer w-full px-4 py-4 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-300 appearance-none cursor-pointer"
-            >
-              <option value="" disabled></option>
-              <option value="abia">Abia</option>
-              <option value="adamawa">Adamawa</option>
-              <option value="akwa-ibom">Akwa Ibom</option>
-              <option value="anambra">Anambra</option>
-              <option value="bauchi">Bauchi</option>
-              <option value="bayelsa">Bayelsa</option>
-              <option value="benue">Benue</option>
-              <option value="borno">Borno</option>
-              <option value="cross-river">Cross River</option>
-              <option value="delta">Delta</option>
-              <option value="ebonyi">Ebonyi</option>
-              <option value="edo">Edo</option>
-              <option value="ekiti">Ekiti</option>
-              <option value="enugu">Enugu</option>
-              <option value="fct">Federal Capital Territory</option>
-              <option value="gombe">Gombe</option>
-              <option value="imo">Imo</option>
-              <option value="jigawa">Jigawa</option>
-              <option value="kaduna">Kaduna</option>
-              <option value="kano">Kano</option>
-              <option value="katsina">Katsina</option>
-              <option value="kebbi">Kebbi</option>
-              <option value="kogi">Kogi</option>
-              <option value="kwara">Kwara</option>
-              <option value="lagos">Lagos</option>
-              <option value="nasarawa">Nasarawa</option>
-              <option value="niger">Niger</option>
-              <option value="ogun">Ogun</option>
-              <option value="ondo">Ondo</option>
-              <option value="osun">Osun</option>
-              <option value="oyo">Oyo</option>
-              <option value="plateau">Plateau</option>
-              <option value="rivers">Rivers</option>
-              <option value="sokoto">Sokoto</option>
-              <option value="taraba">Taraba</option>
-              <option value="yobe">Yobe</option>
-              <option value="zamfara">Zamfara</option>
-            </select>
-            <label
-              htmlFor="state"
-              className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                formData.state
-                  ? "top-2 text-xs text-blue-600 font-medium"
-                  : "top-4 text-gray-500 dark:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:font-medium"
-              }`}
-            >
-              State *
-            </label>
-            <div className="absolute right-4 top-4 pointer-events-none">
-              <svg
-                className="w-5 h-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
-          </div>
-
-          {/* Subject Field */}
-          <div className="relative group">
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              required
-              className="peer w-full px-4 py-4 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-300 placeholder-transparent"
-              placeholder="What's this about?"
-            />
-            <label
-              htmlFor="subject"
-              className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                formData.subject
-                  ? "top-2 text-xs text-blue-600 font-medium"
-                  : "top-4 text-gray-500 dark:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:font-medium"
-              }`}
-            >
-              Subject *
-            </label>
-          </div>
-
-          {/* Message Field */}
-          <div className="relative group">
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows={4}
-              className="peer w-full px-4 py-4 text-gray-900 dark:text-white bg-white dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:outline-none focus:border-blue-500 focus:bg-white transition-all duration-300 resize-none placeholder-transparent"
-              placeholder="Tell us more details..."
-            />
-            <label
-              htmlFor="message"
-              className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                formData.message
-                  ? "top-2 text-xs text-blue-600 font-medium"
-                  : "top-4 text-gray-500 dark:text-gray-400 peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:font-medium"
-              }`}
-            >
-              Message *
-            </label>
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={status.loading}
-            className={`w-full py-4 px-6 rounded-2xl font-semibold text-white transition-all duration-300 transform ${
-              status.loading
-                ? "bg-gray-400 cursor-not-allowed scale-95"
-                : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-200"
-            }`}
+        <div className="relative">
+          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">State *</label>
+          <select
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={selectClass("state")}
           >
-            {status.loading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Sending...</span>
-              </div>
-            ) : (
-              "Send Message"
-            )}
-          </button>
-        </form>
+            <option value="">Select your state</option>
+            {nigerianStates.map((s) => (
+              <option key={s} value={s.toLowerCase()}>{s}</option>
+            ))}
+          </select>
+          <div className="absolute right-3 top-[42px] pointer-events-none">
+            <svg className="w-4 h-4 text-charcoal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          {errors.state && touched.state && <p className="mt-1 text-xs text-red-500">{errors.state}</p>}
+        </div>
 
-        {/* Success Message */}
-        {status.success && (
-          <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl">
-            <div className="flex items-center space-x-3">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <p className="text-green-800 font-medium">Success!</p>
-                <p className="text-green-700 text-sm">
-                  Your message has been sent. We'll get back to you soon.
-                </p>
-              </div>
+        <div>
+          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">Subject *</label>
+          <input
+            type="text"
+            name="subject"
+            value={formData.subject}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className={inputClass("subject")}
+            placeholder="I'm interested in..."
+          />
+          {errors.subject && touched.subject && <p className="mt-1 text-xs text-red-500">{errors.subject}</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-charcoal-700 mb-1.5">Message *</label>
+          <textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            rows={4}
+            className={`${inputClass("message")} resize-none`}
+            placeholder="Tell us more about what you're looking for..."
+          />
+          {errors.message && touched.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
+        </div>
+
+        <button
+          type="submit"
+          disabled={status.loading}
+          className={`w-full py-3.5 px-6 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
+            status.loading
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-brand-500 hover:bg-brand-400 text-charcoal-950 shadow-lg hover:shadow-xl"
+          }`}
+        >
+          {status.loading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-charcoal-500 border-t-transparent rounded-full animate-spin" />
+              Sending...
+            </>
+          ) : (
+            <>
+              <Send className="w-4 h-4" />
+              Send Message
+            </>
+          )}
+        </button>
+      </form>
+
+      {status.success && (
+        <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+          <div className="flex items-center gap-3">
+            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+            <div>
+              <p className="text-green-800 font-medium text-sm">Message sent successfully!</p>
+              <p className="text-green-600 text-xs mt-0.5">We&apos;ll get back to you within 24 hours.</p>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Error Message */}
-        {status.error && (
-          <div className="mt-6 p-4 bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 rounded-2xl">
-            <div className="flex items-center space-x-3">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <p className="text-red-800 font-medium">Error</p>
-                <p className="text-red-700 text-sm">{status.error}</p>
-              </div>
-            </div>
+      {status.error && (
+        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+            <p className="text-red-700 text-sm font-medium">{status.error}</p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
